@@ -11,13 +11,13 @@ describe('. routes', () => {
   it ('allows a user to sign up via POST', () => {
     //email, password
     return request(app)
-      .post('api/v1/auth/signup')
+      .post('/api/v1/auth/signup')
       .send({ email: 'test@test.com', password:'password' })
       .then(res => {
         expect(res.body).toEqual({
           id: expect.any(String),
           email: 'test@test.com',
-          password: 'password'
+          passwordHash: expect.any(String)
         });
       });
   });
