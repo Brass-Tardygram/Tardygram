@@ -26,14 +26,14 @@ describe('. routes', () => {
   it('allows a user to login via POST', async() => {
     const user = await UserService.create({
       email: 'test@test.com',
-      passwordHash: expect.any(String)
+      password: 'password'
     });
 
     const res = await request(app)
-      .post('/api/v1auth/login')
+      .post('/api/v1/auth/login')
       .send({
         email: 'test@test.com',
-        passwordHash: expect.any(String)
+        password: 'password'
       });
 
     expect(res.body).toEqual(user);
