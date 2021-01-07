@@ -17,7 +17,7 @@ describe('. routes', () => {
     });
 
 
-    it.only ('adds a postgram image url into postgram table using post', async() => {
+    it('adds a postgram image url into postgram table using post', async() => {
       const agent = request.agent(app)
       const user = await UserService.create({
         email: "test@test.com",
@@ -25,7 +25,7 @@ describe('. routes', () => {
         profilePhotoURL: "myspecialphoto.jpg" 
       });
       
-     const booger = await agent 
+      await agent 
       .post('/api/v1/auth/login')
       .send({
         email: "test@test.com",
@@ -49,9 +49,9 @@ describe('. routes', () => {
           tags: ['yolo', 'carpe diem']
       }); 
     });
-
-
-
+    
+    // it('get all posts', async() => {
+      
+    // })
 });
-
 
