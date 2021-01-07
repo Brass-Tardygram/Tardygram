@@ -3,6 +3,7 @@ const pool = require('../lib/utils/pool');
 const request = require('supertest');
 const app = require('../lib/app');
 const UserService = require('../lib/services/UserService');
+const { agent } = require('supertest');
 
 describe('. routes', () => {
   beforeEach(() => {
@@ -36,6 +37,25 @@ describe('. routes', () => {
         password: 'password'
       });
 
+    expect(res.body).toEqual(user);
+  });
+
+  it('verifies a user is logged in', async() => {
+    const user = await UserService.create({
+      email: 'test@test.com',
+      password: 'password'
+    });
+
+    await agent
+      .post('/api/v1/auth/login')
+      .send({
+        email: 'test@test.com',
+        password: 'password'
+      });
+
+    const res = await agent
+      .get('/app/v1/auth/verify');
+    
     expect(res.body).toEqual(user);
   });
 });
