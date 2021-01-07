@@ -3,6 +3,8 @@ const pool = require('../lib/utils/pool');
 const request = require('supertest');
 const app = require('../lib/app');
 const Postgram = require('../lib/models/Postgram');
+const UserService = require('../lib/services/UserService');
+const User = require('../lib/models/User');
 
 
 describe('. routes', () => {
@@ -16,18 +18,32 @@ describe('. routes', () => {
 
 
     it.only ('adds a postgram image url into postgram table using post', async() => {
-      const res = await request(app)
+      const agent = request.agent(app)
+      const user = await UserService.create({
+        email: "test@test.com",
+        password: "password",
+        profilePhotoURL: "myspecialphoto.jpg" 
+      });
+      
+     const booger = await agent 
+      .post('/api/v1/auth/login')
+      .send({
+        email: "test@test.com",
+        password: "password",
+        profilePhotoURL: "myspecialphoto.jpg" 
+      })
+    
+      const res = await agent
         .post('/api/v1/postgram')
         .send({
-          userId: "1",
+          userId: user.id,
           photoURL: 'selfphoto.jpg',
           caption: "cool story bro",
           tags: ['yolo', 'carpe diem']
       })
-
         expect(res.body).toEqual({
-          id: "1",
-          userId: 1,
+          id: expect.any(String),
+          userId: user.id,
           photoURL: 'selfphoto.jpg',
           caption: "cool story bro",
           tags: ['yolo', 'carpe diem']

@@ -10,7 +10,7 @@ CREATE TABLE users (
 
 CREATE TABLE postgram (
   id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-  user_id INTEGER NOT NULL,
+  user_id BIGINT REFERENCES users(id) NOT NULL,
   photo_url TEXT NOT NULL,
   caption TEXT,
   tags TEXT[]
