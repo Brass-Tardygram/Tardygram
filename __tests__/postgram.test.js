@@ -50,8 +50,51 @@ describe('. routes', () => {
       }); 
     });
     
-    // it('get all posts', async() => {
+    it('get all posts', async() => {
+      const agent = request.agent(app)
+      const user = await UserService.create({
+        email: "test@test.com",
+        password: "password",
+        profilePhotoURL: "myspecialphoto.jpg" 
+      });
       
-    // })
+      await agent 
+      .post('/api/v1/auth/login')
+      .send({
+        email: "test@test.com",
+        password: "password",
+        profilePhotoURL: "myspecialphoto.jpg" 
+      })
+    
+      const res = await agent
+        .post('/api/v1/postgram')
+        .send({
+          userId: user.id,
+          photoURL: 'selfphoto.jpg',
+          caption: "cool story bro",
+          tags: ['yolo', 'carpe diem']
+          },{
+          userId: user.id,
+          photoURL: 'jim.jpg',
+          caption: "cool story Jim",
+          tags: ['mofo', 'fomo'] 
+        });
+
+        const res = await agent
+        .get('/api/v1/postgram');
+
+        expect(res.body).toEqual({
+          userId: user.id,
+          photoURL: 'selfphoto.jpg',
+          caption: "cool story bro",
+          tags: ['yolo', 'carpe diem']
+          },{
+          userId: user.id,
+          photoURL: 'jim.jpg',
+          caption: "cool story Jim",
+          tags: ['mofo', 'fomo'] 
+        }); 
+        
+    });
 });
 
