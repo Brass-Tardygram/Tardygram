@@ -22,7 +22,6 @@ describe('. routes', () => {
         expect(res.body).toEqual({
           id: expect.any(String),
           email: 'test@test.com',
-          passwordHash: expect.any(String)
         });
       });
   });
@@ -40,7 +39,10 @@ describe('. routes', () => {
         password: 'password'
       });
 
-    expect(res.body).toEqual(user);
+    expect(res.body).toEqual({
+      id: user.id,
+      email: 'test@test.com'
+    });
   });
 
   it('verifies a user is logged in', async() => {
@@ -60,6 +62,9 @@ describe('. routes', () => {
     const res = await agent
       .get('/api/v1/auth/verify');
     
-    expect(res.body).toEqual(user);
+    expect(res.body).toEqual({
+      id: user.id,
+      email: 'test@test.com'
+    });
   });
 });
