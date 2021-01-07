@@ -17,11 +17,12 @@ describe('. routes', () => {
     //email, password
     return request(app)
       .post('/api/v1/auth/signup')
-      .send({ email: 'test@test.com', password:'password' })
+      .send({ email: 'test@test.com', password:'password', profilePhotoURL: 'someoneSpecial.jpg' })
       .then(res => {
         expect(res.body).toEqual({
           id: expect.any(String),
           email: 'test@test.com',
+          profilePhotoURL: 'someoneSpecial.jpg' ,
         });
       });
   });
@@ -29,19 +30,22 @@ describe('. routes', () => {
   it('allows a user to login via POST', async() => {
     const user = await UserService.create({
       email: 'test@test.com',
-      password: 'password'
+      password: 'password',
+      profilePhotoURL: 'someoneSpecial.jpg'
     });
 
     const res = await request(app)
       .post('/api/v1/auth/login')
       .send({
         email: 'test@test.com',
-        password: 'password'
+        password: 'password',
+        profilePhotoURL: 'someoneSpecial.jpg' 
       });
 
     expect(res.body).toEqual({
       id: user.id,
-      email: 'test@test.com'
+      email: 'test@test.com',
+      profilePhotoURL: 'someoneSpecial.jpg'
     });
   });
 
@@ -49,14 +53,16 @@ describe('. routes', () => {
     const agent = request.agent(app);
     const user = await UserService.create({
       email: 'test@test.com',
-      password: 'password'
+      password: 'password',
+      profilePhotoURL: 'someoneSpecial.jpg' 
     });
 
     await agent
       .post('/api/v1/auth/login')
       .send({
         email: 'test@test.com',
-        password: 'password'
+        password: 'password',
+        profilePhotoURL: 'someoneSpecial.jpg' 
       });
 
     const res = await agent
@@ -64,7 +70,8 @@ describe('. routes', () => {
     
     expect(res.body).toEqual({
       id: user.id,
-      email: 'test@test.com'
+      email: 'test@test.com',
+      profilePhotoURL: 'someoneSpecial.jpg' 
     });
   });
 });
