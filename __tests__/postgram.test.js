@@ -161,7 +161,6 @@ describe('. routes', () => {
       .send({
         caption:"Living my best life"
       });
-  
       
       expect(res.body).toEqual({
         id: expect.any(String),
