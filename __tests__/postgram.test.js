@@ -66,35 +66,51 @@ describe('. routes', () => {
         profilePhotoURL: "myspecialphoto.jpg" 
       })
     
-      const res = await agent
-        .post('/api/v1/postgram')
-        .send({
-          userId: user.id,
-          photoURL: 'selfphoto.jpg',
-          caption: "cool story bro",
-          tags: ['yolo', 'carpe diem']
-          },{
-          userId: user.id,
+      const grams = await Promise.all([
+        { 
+        userId: user.id,
+        photoURL: 'selfphoto.jpg',
+        caption: "cool story bro",
+        tags: ['yolo', 'carpe diem']},
+        { userId: user.id,
           photoURL: 'jim.jpg',
           caption: "cool story Jim",
-          tags: ['mofo', 'fomo'] 
-        });
-
+          tags: ['mofo', 'fomo'] }
+      ].map(postgram => Postgram.insert(postgram)));
+    
         const res = await agent
         .get('/api/v1/postgram');
-
-        expect(res.body).toEqual({
+        
+        console.log(res.body);
+        expect(res.body).toEqual([{
+          id: expect.any(String),
           userId: user.id,
           photoURL: 'selfphoto.jpg',
           caption: "cool story bro",
           tags: ['yolo', 'carpe diem']
           },{
+          id: expect.any(String),
           userId: user.id,
           photoURL: 'jim.jpg',
           caption: "cool story Jim",
           tags: ['mofo', 'fomo'] 
-        }); 
+        }]); 
         
     });
 });
 
+// it('gets all recipes', async() => {
+//   const recipes = await Promise.all([
+//     { name: 'cookies', ingredients: [], directions: [] },
+//     { name: 'cake', ingredients: [], directions: [] },
+//     { name: 'pie', ingredients: [], directions: [] }
+//   ].map(recipe => Recipe.insert(recipe)));
+
+//   return request(app)
+//     .get('/api/v1/recipes')
+//     .then(res => {
+//       recipes.forEach(recipe => {
+//         expect(res.body).toContainEqual(recipe);
+//       });
+//     });
+// });
