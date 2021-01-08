@@ -22,7 +22,7 @@ describe('. routes', () => {
       profilePhotoURL: 'face.jpg'
     });
 
-    const post = await agent
+    await agent
       .post('/api/v1/auth/login')
       .send({
         email: 'test@test.com',
@@ -30,18 +30,27 @@ describe('. routes', () => {
         profilePhotoURL: 'face.jpg'
       });
 
+    const post = await agent
+      .post('/api/v1/postgram')
+      .send({
+        userId: user.id,
+        photoURL: 'whatever.jpg',
+        caption: 'doin stuff',
+        tags: ['the world is a trash fire']
+      });
+
     const comment = await agent
       .post('/api/v1/comments')
       .send({
         commentBy: user.id,
-        post: post.id,
+        post: post.body.id,
         comment: 'Lookin sick my dude'
       });
 
     expect(comment.body).toEqual({
       id: expect.any(String),
       commentBy: user.id,
-      post: post.id,
+      post: post.body.id,
       comment: 'Lookin sick my dude'
     });
 
