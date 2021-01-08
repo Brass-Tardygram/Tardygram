@@ -170,5 +170,41 @@ describe('. routes', () => {
         tags: ['yolo', 'carpe diem']
      }); 
   });
+
+  it('deletes a post', async() => {
+    const agent = request.agent(app)
+    const user = await UserService.create({
+      email: "test@test.com",
+      password: "password",
+      profilePhotoURL: "myspecialphoto.jpg" 
+    });
+    
+    await agent 
+    .post('/api/v1/auth/login')
+    .send({
+      email: "test@test.com",
+      password: "password",
+      profilePhotoURL: "myspecialphoto.jpg" 
+    });
+  
+    const gram = await Postgram
+    .insert({ 
+      userId: user.id,
+      photoURL: 'selfphoto.jpg',
+      caption: "cool story bro",
+      tags: ['yolo', 'carpe diem']
+    });
+      
+    const res = await agent
+      .delete(`/api/v1/postgram/${gram.id}`)
+      });
+      
+      expect(res.body).toEqual({
+        id: expect.any(String),
+        userId: user.id,
+        photoURL: 'selfphoto.jpg',
+        caption:"cool story bro",
+        tags: ['yolo', 'carpe diem']
+     }); 
 });
 
