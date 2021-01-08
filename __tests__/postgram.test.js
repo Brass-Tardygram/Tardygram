@@ -195,16 +195,15 @@ describe('. routes', () => {
       tags: ['yolo', 'carpe diem']
     });
       
-    const res = await agent
-      .delete(`/api/v1/postgram/${gram.id}`)
-      });
+    return await agent 
+    .delete(`/api/v1/postgram/${gram.id}`)
       
-      expect(res.body).toEqual({
-        id: expect.any(String),
+    .then(res => {
+      expect(res.body).toEqual({ id: expect.any(String),
         userId: user.id,
         photoURL: 'selfphoto.jpg',
         caption:"cool story bro",
-        tags: ['yolo', 'carpe diem']
-     }); 
+        tags: ['yolo', 'carpe diem']});
+    });
+  });
 });
-
