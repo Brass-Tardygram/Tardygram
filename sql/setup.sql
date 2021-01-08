@@ -15,3 +15,10 @@ CREATE TABLE postgram (
   caption TEXT,
   tags TEXT[]
 );
+
+CREATE TABLE comment (
+  id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  comment_by BIGINT REFERENCES users(id) NOT NULL,
+  post BIGINT REFERENCES postgram(id) NOT NULL,
+  comment TEXT NOT NULL
+);

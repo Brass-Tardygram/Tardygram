@@ -22,7 +22,7 @@ describe('. routes', () => {
         expect(res.body).toEqual({
           id: expect.any(String),
           email: 'test@test.com',
-          profilePhotoURL: 'someoneSpecial.jpg' ,
+          profilePhotoURL: 'someoneSpecial.jpg',
         });
       });
   });
