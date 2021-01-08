@@ -81,7 +81,6 @@ describe('. routes', () => {
         const res = await agent
         .get('/api/v1/postgram');
         
-        console.log(res.body);
         expect(res.body).toEqual([{
           id: expect.any(String),
           userId: user.id,
@@ -99,18 +98,3 @@ describe('. routes', () => {
     });
 });
 
-// it('gets all recipes', async() => {
-//   const recipes = await Promise.all([
-//     { name: 'cookies', ingredients: [], directions: [] },
-//     { name: 'cake', ingredients: [], directions: [] },
-//     { name: 'pie', ingredients: [], directions: [] }
-//   ].map(recipe => Recipe.insert(recipe)));
-
-//   return request(app)
-//     .get('/api/v1/recipes')
-//     .then(res => {
-//       recipes.forEach(recipe => {
-//         expect(res.body).toContainEqual(recipe);
-//       });
-//     });
-// });
