@@ -94,7 +94,41 @@ describe('. routes', () => {
           caption: "cool story Jim",
           tags: ['mofo', 'fomo'] 
         }]); 
-        
     });
+
+    it('get post by id', async() => {
+      const agent = request.agent(app)
+      const user = await UserService.create({
+        email: "test@test.com",
+        password: "password",
+        profilePhotoURL: "myspecialphoto.jpg" 
+      });
+      
+      await agent 
+      .post('/api/v1/auth/login')
+      .send({
+        email: "test@test.com",
+        password: "password",
+        profilePhotoURL: "myspecialphoto.jpg" 
+      });
+    
+      await Postgram.insert({ 
+        userId: user.id,
+        photoURL: 'selfphoto.jpg',
+        caption: "cool story bro",
+        tags: ['yolo', 'carpe diem']
+      });
+    
+        const res = await agent
+        .get('/api/v1/postgram/${gram.id}');
+        
+        expect(res.body).toEqual({
+          id: expect.any(String),
+          userId: user.id,
+          photoURL: 'selfphoto.jpg',
+          caption: "cool story bro",
+          tags: ['yolo', 'carpe diem']
+       }); 
+   });
 });
 
