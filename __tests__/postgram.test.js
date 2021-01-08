@@ -118,10 +118,10 @@ describe('. routes', () => {
         caption: 'cool story bro',
         tags: ['yolo', 'carpe diem']
       });
-        
+      
     const res = await agent
-      .get(`/api/v1/postgram/${gram.id}`);
-        
+      .get(`/api/v1/postgram/${gram.id}`);  
+
     expect(res.body).toEqual({
       id: expect.any(String),
       userId: user.id,
