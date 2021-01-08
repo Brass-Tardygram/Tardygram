@@ -47,17 +47,12 @@ describe('. routes', () => {
         comment: 'Lookin sick my dude'
       });
 
-    return await agent
-      .delete(`/api/v1/comments/${comment.id}`)
-      .then(res => {
-        expect(res.body).toEqual({
-          id: expect.any(String),
-          commentBy: user.id,
-          post: post.body.id,
-          comment: 'Lookin sick my dude'
-        });
-      });
-
+    expect(comment.body).toEqual({
+      id: expect.any(String),
+      commentBy: user.id,
+      post: post.body.id,
+      comment: 'Lookin sick my dude'
+    });
 
   });
 
@@ -86,12 +81,22 @@ describe('. routes', () => {
         tags: ['the world is a trash fire']
       });
 
-    const comment = await agent
-      .post('/api/v1/comments')
-      .send({
+    const comment = await Comment
+      .insert({
         commentBy: user.id,
         post: post.body.id,
         comment: 'Lookin sick my dude'
+      });
+
+    return await agent
+      .delete(`/api/v1/comments/${comment.id}`)
+      .then(res => {
+        expect(res.body).toEqual({
+          id: expect.any(String),
+          commentBy: user.id,
+          post: post.body.id,
+          comment: 'Lookin sick my dude'
+        });
       });
   });
 });
