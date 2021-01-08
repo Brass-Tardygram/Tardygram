@@ -15,6 +15,35 @@ describe('. routes', () => {
   });
 
   it.only('adds a comment', async() => {
+    const agent = request.agent(app);
+    const user = await UserService.create({
+      email: 'test@test.com',
+      password: 'password',
+      profilePhotoURL: 'face.jpg'
+    });
+
+    const post = await agent
+      .post('/api/v1/auth/login')
+      .send({
+        email: 'test@test.com',
+        password: 'password',
+        profilePhotoURL: 'face.jpg'
+      });
+
+    const comment = await agent
+      .post('/api/v1/comments')
+      .send({
+        commentBy: user.id,
+        post: post.id,
+        comment: 'Lookin sick my dude'
+      });
+
+    expect(comment.body).toEqual({
+      id: expect.any(String),
+      commentBy: user.id,
+      post: post.id,
+      comment: 'Lookin sick my dude'
+    });
 
   });
 
