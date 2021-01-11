@@ -9,7 +9,7 @@ const Comment = require('../lib/models/Comment');
 
 describe('. routes', () => {
   beforeEach(() => {
-    return pool.query(fs.readFileSync('./sql/setup.sql', 'utf-8'));
+    return pool.query(fs.readFileSync('./sql/postgramTest.sql', 'utf-8'));
   });
   
   afterAll(() => {
