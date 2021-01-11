@@ -4,7 +4,6 @@ const request = require('supertest');
 const app = require('../lib/app');
 const Postgram = require('../lib/models/Postgram');
 const UserService = require('../lib/services/UserService');
-const Comment = require('../lib/models/Comment');
 
 
 describe('. routes', () => {
@@ -208,8 +207,9 @@ describe('. routes', () => {
   });
 
   it('get popular posts', async() => {
+    await pool.query(fs.readFileSync('./sql/postgramTest.sql', 'utf-8'));
     const agent = request.agent(app);
-    const user = await UserService.create({
+    await UserService.create({
       email: 'test@test.com',
       password: 'password',
       profilePhotoURL: 'myspecialphoto.jpg' 
@@ -222,117 +222,24 @@ describe('. routes', () => {
         password: 'password',
         profilePhotoURL: 'myspecialphoto.jpg' 
       });
-    
-    const posts = await Promise.all([
-      { userId: user.id,
-        photoURL: 'selfphoto.jpg',
-        caption: 'cool story bro',
-        tags: ['yolo', 'carpe diem'] },
-      { userId: user.id,
-        photoURL: 'jim.jpg',
-        caption: 'cool story Jim',
-        tags: ['mofo', 'fomo'] },
-      { userId: user.id,
-        photoURL: 'pam.jpg',
-        caption: 'cool story Pam',
-        tags: ['mofo', 'fomo'] },
-      { userId: user.id,
-        photoURL: 'dwight.jpg',
-        caption: 'cool story Dwight',
-        tags: ['mofo', 'fomo'] },
-      { userId: user.id,
-        photoURL: 'andy.jpg',
-        caption: 'cool story Andy',
-        tags: ['mofo', 'fomo'] },
-      { userId: user.id,
-        photoURL: 'angela.jpg',
-        caption: 'cool story Angela',
-        tags: ['mofo', 'fomo'] },
-      { userId: user.id,
-        photoURL: 'oscar.jpg',
-        caption: 'cool story Oscar',
-        tags: ['mofo', 'fomo'] },
-      { userId: user.id,
-        photoURL: 'meredith.jpg',
-        caption: 'cool story Meredith',
-        tags: ['mofo', 'fomo'] },
-      { userId: user.id,
-        photoURL: 'bob.jpg',
-        caption: 'cool story Bob',
-        tags: ['mofo', 'fomo'] },
-      { userId: user.id,
-        photoURL: 'kevin.jpg',
-        caption: 'cool story Kevin',
-        tags: ['mofo', 'fomo'] }
-    ].map(postgram => Postgram.insert(postgram)));
+  
+    const posts = await Postgram
+      .find();
 
-    await Promise.all([
-      {
-        commentBy: user.id,
-        post: 4,
-        comment: 'Lookin sick my dude'
-      }, {
-        commentBy: user.id,
-        post: 7,
-        comment: 'Lookin sick my dude'
-      }, {
-        commentBy: user.id,
-        post: 1,
-        comment: 'Lookin sick my dude'
-      }, {
-        commentBy: user.id,
-        post: 4,
-        comment: 'Lookin sick my dude'
-      }, {
-        commentBy: user.id,
-        post: 2,
-        comment: 'Lookin sick my dude'
-      }, {
-        commentBy: user.id,
-        post: 10,
-        comment: 'Lookin sick my dude'
-      }, {
-        commentBy: user.id,
-        post: 9,
-        comment: 'Lookin sick my dude'
-      }, {
-        commentBy: user.id,
-        post: 5,
-        comment: 'Lookin sick my dude'
-      }, {
-        commentBy: user.id,
-        post: 3,
-        comment: 'Lookin sick my dude'
-      }, {
-        commentBy: user.id,
-        post: 7,
-        comment: 'Lookin sick my dude'
-      }, {
-        commentBy: user.id,
-        post: 9,
-        comment: 'Lookin sick my dude'
-      }, {
-        commentBy: user.id,
-        post: 8,
-        comment: 'Lookin sick my dude'
-      }, {
-        commentBy: user.id,
-        post: 3,
-        comment: 'Lookin sick my dude'
-      }, {
-        commentBy: user.id,
-        post: 6,
-        comment: 'Lookin sick my dude'
-      }, {
-        commentBy: user.id,
-        post: 4,
-        comment: 'Lookin sick my dude'
-      }
-    ].map(comment => Comment.insert(comment)));
-    
     const res = await agent
       .get('/api/v1/postgram/popular');
         
-    expect(res.body).toEqual(expect.arrayContaining((posts))); 
+    expect(res.body).toEqual([
+      posts[3],
+      posts[2],
+      posts[8],
+      posts[6],
+      posts[0],
+      posts[9],
+      posts[4],
+      posts[7],
+      posts[5],
+      posts[1]
+    ]); 
   });
 });
